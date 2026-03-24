@@ -8,7 +8,8 @@ import DonateForm from "@/components/web3/DonateForm";
 import OrgStatusPanel from "@/components/web3/OrgStatusPanel";
 import LiveFeed from "@/components/web3/LiveFeed";
 import ContractSourceViewer from "@/components/web3/ContractSourceViewer";
-import { Heart, Zap } from "lucide-react";
+import { Zap } from "lucide-react";
+import RootstockLogo from "../../network_icon.svg";
 
 function DashboardContent() {
   const { isConnected } = useWallet();
@@ -25,9 +26,7 @@ function DashboardContent() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center">
-                <Heart className="w-4 h-4 text-primary" />
-              </div>
+              <img src={RootstockLogo} alt="Rootstock" className="w-8 h-8" />
               <div>
                 <h1 className="text-sm font-bold text-foreground tracking-tight">DonateChain</h1>
                 <p className="text-[10px] text-muted-foreground font-mono">RSK Testnet</p>
@@ -66,9 +65,7 @@ function DashboardContent() {
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
         {!isConnected ? (
           <div className="flex flex-col items-center justify-center py-20 text-center">
-            <div className="w-16 h-16 rounded-2xl bg-secondary border border-border flex items-center justify-center mb-6">
-              <Heart className="w-7 h-7 text-muted-foreground" />
-            </div>
+            <img src={RootstockLogo} alt="Rootstock" className="w-16 h-16 mb-6" />
             <h3 className="text-lg font-semibold text-foreground mb-2">Connect your wallet to begin</h3>
             <p className="text-sm text-muted-foreground max-w-sm">
               Connect MetaMask to the RSK Testnet to register a username, make donations, and view the live feed.
