@@ -13,7 +13,7 @@ import {
   parseEther,
   getTxExplorerUrl,
 } from "@/lib/ethersProvider";
-import { Heart, Loader2, ExternalLink, CheckCircle2, EyeOff } from "lucide-react";
+import { CheckCircle2, EyeOff, Loader2, ExternalLink } from "lucide-react";
 
 export default function DonateForm({ onDonationComplete }) {
   const { account, isConnected, refreshBalance } = useWallet();
@@ -81,7 +81,7 @@ export default function DonateForm({ onDonationComplete }) {
     <Card className="bg-card border-border">
       <CardHeader className="pb-3">
         <CardTitle className="text-sm font-semibold flex items-center gap-2">
-          <Heart className="w-4 h-4 text-primary" />
+          <img src="../../network_icon.svg" alt="Rootstock" className="w-4 h-4" />
           Make a Donation
         </CardTitle>
       </CardHeader>
@@ -141,7 +141,7 @@ export default function DonateForm({ onDonationComplete }) {
             </>
           ) : (
             <>
-              <Heart className="w-4 h-4 mr-2" />
+              <CheckCircle2 className="w-4 h-4 mr-2" />
               Donate
             </>
           )}
