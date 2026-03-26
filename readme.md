@@ -44,13 +44,12 @@ This repository contains comprehensive documentation for different audiences:
 | Document | Audience | Purpose |
 |----------|----------|---------|
 | **[readme.md](readme.md)** 📖 | Everyone | Quick start, features, overview (you are here) |
+| **[readme2.md](readme2.md)** 📖 | Everyone | Detailed guide |
 | **[readme3.md](readme3.md)** 📘 | End Users | Complete user guide with step-by-step instructions |
-| **[interview-guide2.md](interview-guide2.md)** 🎯 | Technical Interviewers | Deep-dive architecture & security talking points |
-| **[Interview.md](Interview.md)** 💼 | Recruiters | High-level technical summary |
+
 
 **Recommendation:**
 - **Users**: Start with [readme3.md](readme3.md) for detailed setup and usage
-- **Developers**: Review [interview-guide2.md](interview-guide2.md) for technical depth
 - **Quick Start**: Continue reading this document
 
 ---
