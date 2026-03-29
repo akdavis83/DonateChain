@@ -304,7 +304,7 @@ A: RSK Testnet targets ~30 second block times. Most transactions confirm within 
 ## 📞 Support & Community
 
 ### Documentation
-- Technical Architecture: See `interview-guide2.md`
+
 - Smart Contract Details: Review Solidity files in `New folder/`
 - Frontend Implementation: Examine React components in `src/components/`
 
