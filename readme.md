@@ -15,8 +15,8 @@
 
 ### For Donors
 - ✅ **Transparent Giving**: Every donation recorded on public blockchain
-- ✅ **Anonymous Mode**: Optional privacy for sensitive contributions
-- ✅ **Username System**: Human-readable names instead of wallet addresses
+- ✅ **Anonymous Mode**: Optional privacy for anonymous contributions
+- ✅ **Username System**: Usernames instead of wallet addresses
 - ✅ **Real-Time Feed**: Watch donations appear live as they confirm
 - ✅ **Low Fees**: Fraction of a cent per transaction on RSK
 - ✅ **Multi-Wallet**: Support for MetaMask, Trust Wallet, Coinbase Wallet
@@ -283,7 +283,7 @@ function donate(address _organization, bool _anonymous) external payable {
 ### Individual Donors
 - Micro-donations to content creators
 - Disaster relief contributions
-- Anonymous giving for sensitive causes
+- Anonymous giving
 - International remittances without banking fees
 
 ### Organizations
@@ -444,9 +444,9 @@ This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) 
 ## 📞 Support & Resources
 
 ### Documentation
+- 📘 **[User Guide (readme3.md)](readme2.md)** - More detailed guide
 - 📘 **[User Guide (readme3.md)](readme3.md)** - Complete setup and usage instructions
-- 🎯 **[Interview Guide (interview-guide2.md)](interview-guide2.md)** - Technical deep-dive
-- 💼 **[Interview.md](Interview.md)** - High-level summary
+
 
 ### External Resources
 - [RSK Testnet Faucet](https://faucet.testnet.rsk.co/) - Get free test tokens
@@ -463,7 +463,7 @@ This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) 
 
 ## 🎓 About This Project
 
-**DonateChain** was built as a **portfolio centerpiece** to demonstrate senior blockchain engineering capabilities:
+**DonateChain** was built as a **portfolio centerpiece** to demonstrate blockchain engineering capabilities:
 
 - **Smart Contract Development**: Production-ready Solidity with security patterns
 - **Low-Level EVM Interaction**: Manual ABI encoding, direct JSON-RPC calls
@@ -471,7 +471,7 @@ This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) 
 - **Full-Stack Web3**: Hybrid architecture combining blockchain and traditional backend
 - **Security-First Mindset**: Reentrancy protection, input validation, event logging
 
-**Built for**: Blockchain engineering roles at Web3 companies, DeFi protocols, and blockchain infrastructure teams.
+
 
 ---
 
