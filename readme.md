@@ -15,8 +15,8 @@
 
 ### For Donors
 - ✅ **Transparent Giving**: Every donation recorded on public blockchain
-- ✅ **Anonymous Mode**: Optional privacy for anonymous contributions
-- ✅ **Username System**: Usernames instead of wallet addresses
+- ✅ **Anonymous Mode**: Optional privacy for sensitive contributions
+- ✅ **Username System**: Human-readable names instead of wallet addresses
 - ✅ **Real-Time Feed**: Watch donations appear live as they confirm
 - ✅ **Low Fees**: Fraction of a cent per transaction on RSK
 - ✅ **Multi-Wallet**: Support for MetaMask, Trust Wallet, Coinbase Wallet
@@ -44,12 +44,13 @@ This repository contains comprehensive documentation for different audiences:
 | Document | Audience | Purpose |
 |----------|----------|---------|
 | **[readme.md](readme.md)** 📖 | Everyone | Quick start, features, overview (you are here) |
-| **[readme2.md](readme2.md)** 📖 | Everyone | Detailed guide |
 | **[readme3.md](readme3.md)** 📘 | End Users | Complete user guide with step-by-step instructions |
-
+| **[interview-guide2.md](interview-guide2.md)** 🎯 | Technical Interviewers | Deep-dive architecture & security talking points |
+| **[Interview.md](Interview.md)** 💼 | Recruiters | High-level technical summary |
 
 **Recommendation:**
 - **Users**: Start with [readme3.md](readme3.md) for detailed setup and usage
+- **Developers**: Review [interview-guide2.md](interview-guide2.md) for technical depth
 - **Quick Start**: Continue reading this document
 
 ---
@@ -162,25 +163,9 @@ DonateChain uses a **hybrid Web2/Web3 architecture** that optimizes for both tra
 | **BigInt** | Large number handling |
 
 ### Smart Contracts
-| Technology | Version |
-|------------|---------|
-| **Solidity** | 0.8.20 |
-| **Hardhat** | Latest |
-| **RSK Testnet** | Chain ID 31 |
-
-### Backend
-| Service | Purpose |
-|---------|---------|
-| **Supabase** | PostgreSQL database |
-| **GoTrue** | Authentication |
-| **RLS Policies** | Row-level security |
-
----
-
-## 📜 Smart Contracts
 
 ### UserRegistry
-**Address**: `0xb0C881F70d04E5B6b2af2FE8ac7A322053f38662`
+**Address**: `0xc4A2085e3ECB5c6cDE442d4B9cCCbE17a77Fd4C5`
 
 Maps wallet addresses to unique usernames for display in donation feeds.
 
@@ -202,7 +187,7 @@ function getUsername(address user) external view returns (string memory);
 - Atomic updates (clears old mapping before setting new)
 
 ### DonationManager
-**Address**: `0x77F9079ba92520353BF7d8d051cafE2362EF82a1`
+**Address**: `0xe1b952C4c40BfA478Bb4178162D8daC02176b4d3`
 
 Processes donations with immediate fund forwarding and real-time event logging.
 
@@ -216,8 +201,8 @@ function withdraw() external;
 // Get organization statistics
 function getOrgStats(address org) external view returns (
     uint256 totalReceived,
-    uint256 lastDonationTime,
-    uint256 totalDonations
+    uint256 donationCount,
+    uint256 lastDonationTime
 );
 ```
 
@@ -283,7 +268,7 @@ function donate(address _organization, bool _anonymous) external payable {
 ### Individual Donors
 - Micro-donations to content creators
 - Disaster relief contributions
-- Anonymous giving
+- Anonymous giving for sensitive causes
 - International remittances without banking fees
 
 ### Organizations
@@ -444,9 +429,9 @@ This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) 
 ## 📞 Support & Resources
 
 ### Documentation
-- 📘 **[User Guide (readme3.md)](readme2.md)** - More detailed guide
 - 📘 **[User Guide (readme3.md)](readme3.md)** - Complete setup and usage instructions
-
+- 🎯 **[Interview Guide (interview-guide2.md)](interview-guide2.md)** - Technical deep-dive
+- 💼 **[Interview.md](Interview.md)** - High-level summary
 
 ### External Resources
 - [RSK Testnet Faucet](https://faucet.testnet.rsk.co/) - Get free test tokens
@@ -463,7 +448,7 @@ This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) 
 
 ## 🎓 About This Project
 
-**DonateChain** was built as a **portfolio centerpiece** to demonstrate blockchain engineering capabilities:
+**DonateChain** was built as a **portfolio centerpiece** to demonstrate senior blockchain engineering capabilities:
 
 - **Smart Contract Development**: Production-ready Solidity with security patterns
 - **Low-Level EVM Interaction**: Manual ABI encoding, direct JSON-RPC calls
@@ -471,7 +456,7 @@ This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) 
 - **Full-Stack Web3**: Hybrid architecture combining blockchain and traditional backend
 - **Security-First Mindset**: Reentrancy protection, input validation, event logging
 
-
+**Built for**: Blockchain engineering roles at Web3 companies, DeFi protocols, and blockchain infrastructure teams.
 
 ---
 

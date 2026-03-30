@@ -132,7 +132,7 @@ Before using DonateChain, ensure you have:
 
 3. **Testnet Tokens**
    - **tRBTC** (Testnet Rootstock Bitcoin) for gas fees
-   - Get free tokens from: [RSK Testnet Faucet](https://faucet.rootstock.io/)
+   - Get free tokens from: [RSK Testnet Faucet](https://faucet.testnet.rsk.co/)
 
 ### Installation Steps
 
