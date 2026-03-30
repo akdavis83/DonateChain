@@ -16,7 +16,7 @@ module.exports = {
   },
   etherscan: {
     apiKey: {
-      rskTestnet: "any-arbitrary-string" // Blockscout does not require a specific key here
+      rskTestnet: "any-arbitrary-string"
     },
     customChains: [
       {
@@ -28,5 +28,8 @@ module.exports = {
         }
       }
     ]
+  },
+  sourcify: {
+    enabled: false
   }
 };
