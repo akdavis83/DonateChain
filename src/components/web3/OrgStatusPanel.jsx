@@ -63,22 +63,29 @@ export default function OrgStatusPanel({ refreshTrigger }) {
     setLoading(true);
     setError(null);
     try {
+      console.log("Fetching stats for org:", addr);
       const statsTx = await callContract(donationAddr, "getOrgStats(address)", [
         { type: "address", value: addr },
       ]);
+      console.log("getOrgStats call params:", statsTx);
       const statsResult = await ethCall(statsTx);
-      const [totalReceived, donationCount, lastDonationTime] = decodeMultipleUint256(statsResult, 3);
+      console.log("getOrgStats result:", statsResult);
+      // Returns: totalReceived, lastDonationTime, donationCount (in that order)
+       const [totalReceived, lastDonationTime, donationCount] = decodeMultipleUint256(statsResult, 3);
+       console.log("Decoded stats:", { totalReceived: totalReceived.toString(), donationCount: donationCount.toString(), lastDonationTime: lastDonationTime.toString() });
 
-      const balTx = await callContract(donationAddr, "orgBalances(address)", [
-        { type: "address", value: addr },
-      ]);
-      const balResult = await ethCall(balTx);
-      const bal = decodeUint256(balResult);
-
-      setStats({ totalReceived, donationCount: Number(donationCount), lastDonationTime: Number(lastDonationTime) });
-      setOrgBalance(bal);
+       setStats({ totalReceived, donationCount: Number(donationCount), lastDonationTime: Number(lastDonationTime) });
+       
+       // Fetch organization balance
+       const balTx = await callContract(donationAddr, "orgBalances(address)", [
+         { type: "address", value: addr },
+       ]);
+       const balResult = await ethCall(balTx);
+       const bal = decodeUint256(balResult);
+       setOrgBalance(bal);
     } catch (err) {
-      setError("Failed to fetch stats");
+      console.error("Failed to fetch stats:", err);
+      setError("Failed to fetch stats: " + err.message);
     } finally {
       setLoading(false);
     }
