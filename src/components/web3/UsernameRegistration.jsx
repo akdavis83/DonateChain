@@ -56,8 +56,7 @@ export default function UsernameRegistration() {
     setError(null);
     setTxHash(null);
     try {
-      const functionSig = currentUsername ? "updateUsername(string)" : "register(string)";
-      const tx = await callContract(registryAddr, functionSig, [
+      const tx = await callContract(registryAddr, "registerUsername(string)", [
         { type: "string", value: newUsername.trim() },
       ]);
       const hash = await ethSendTransaction(tx, account);
