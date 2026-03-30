@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useWallet } from "@/lib/walletContext.jsx";
-import { Wallet, LogOut, AlertTriangle, Loader2, RefreshCw, ExternalLink } from "lucide-react";
-import { switchToRskTestnet, hasMetaMask, hasAnyWallet } from "@/lib/ethersProvider";
+import { Wallet, LogOut, AlertTriangle, Loader2, RefreshCw, ExternalLink, ChevronDown } from "lucide-react";
+import { switchToRskTestnet, hasMetaMask, hasAnyWallet, getMetaMaskProvider } from "@/lib/ethersProvider";
 import {
   Dialog,
   DialogContent,
@@ -10,6 +10,12 @@ import {
   DialogTitle,
   DialogDescription,
 } from "@/components/ui/dialog";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 function shortenAddress(addr) {
   if (!addr) return "";
@@ -17,7 +23,7 @@ function shortenAddress(addr) {
 }
 
 export default function WalletConnect() {
-  const { account, balance, isConnected, isCorrectNetwork, connecting, error, connect, disconnect } = useWallet();
+  const { account, balance, isConnected, isCorrectNetwork, connecting, error, connect, disconnect, forceReconnect } = useWallet();
   const [showDialog, setShowDialog] = useState(false);
   const [retrying, setRetrying] = useState(false);
 
@@ -44,19 +50,36 @@ export default function WalletConnect() {
     connect();
   };
 
+  const handleChangeAccount = async () => {
+    // Use forceReconnect to prompt MetaMask account selector
+    await forceReconnect();
+  };
+
   if (isConnected) {
     return (
       <div className="flex items-center gap-3">
         <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-lg bg-secondary border border-border">
           <span className="text-xs font-mono text-muted-foreground">{balance} tRBTC</span>
         </div>
-        <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-accent/50 border border-primary/20">
-          <div className="w-2 h-2 rounded-full bg-primary animate-pulse-glow" />
-          <span className="text-xs font-mono text-accent-foreground">{shortenAddress(account)}</span>
-        </div>
-        <Button variant="ghost" size="icon" onClick={disconnect} className="h-8 w-8 text-muted-foreground hover:text-foreground">
-          <LogOut className="w-4 h-4" />
-        </Button>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" className="h-8 px-2 gap-2 text-muted-foreground hover:text-foreground">
+              <div className="w-2 h-2 rounded-full bg-primary animate-pulse-glow" />
+              <span className="text-xs font-mono text-accent-foreground">{shortenAddress(account)}</span>
+              <ChevronDown className="w-3 h-3" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="w-48 bg-card border-border">
+            <DropdownMenuItem onClick={handleChangeAccount} className="cursor-pointer">
+              <Wallet className="w-4 h-4 mr-2" />
+              Change Account
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={disconnect} className="cursor-pointer text-destructive">
+              <LogOut className="w-4 h-4 mr-2" />
+              Disconnect
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
     );
   }
