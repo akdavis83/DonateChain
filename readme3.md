@@ -411,7 +411,7 @@ Some data is inefficient or inappropriate for blockchain:
 
 ### UserRegistry.sol
 
-**Contract Address:** `0xb0C881F70d04E5B6b2af2FE8ac7A322053f38662`
+**Contract Address:** `0xc4A2085e3ECB5c6cDE442d4B9cCCbE17a77Fd4C5`
 
 **Purpose**: Map wallet addresses to unique usernames for display in donation feeds.
 
@@ -504,7 +504,7 @@ event UsernameUpdated(address indexed user, string oldUsername, string newUserna
 
 ### DonationManager.sol
 
-**Contract Address:** `0x77F9079ba92520353BF7d8d051cafE2362EF82a1`
+**Contract Address:** `0xe1b952C4c40BfA478Bb4178162D8daC02176b4d3`
 
 **Purpose**: Handle donation processing, fund forwarding, and donation tracking.
 
@@ -962,8 +962,8 @@ A: Yes! All smart contracts and frontend code are publicly visible and auditable
 
 **Q: Can I audit the contracts?**
 A: Absolutely! Contracts are verified on Blockscout:
-- UserRegistry: `0xb0C881F70d04E5B6b2af2FE8ac7A322053f38662`
-- DonationManager: `0x77F9079ba92520353BF7d8d051cafE2362EF82a1`
+- UserRegistry: `0xc4A2085e3ECB5c6cDE442d4B9cCCbE17a77Fd4C5`
+- DonationManager: `0xe1b952C4c40BfA478Bb4178162D8daC02176b4d3`
 
 ### Security Questions
 
@@ -1003,8 +1003,8 @@ A: Click "View on Explorer" to see the transaction on Blockscout. You can verify
 
 | Contract | Address |
 |----------|---------|
-| UserRegistry | `0xb0C881F70d04E5B6b2af2FE8ac7A322053f38662` |
-| DonationManager | `0x77F9079ba92520353BF7d8d051cafE2362EF82a1` |
+UserRegistry: 0xc4A2085e3ECB5c6cDE442d4B9cCCbE17a77Fd4C5
+DonationManager: 0xe1b952C4c40BfA478Bb4178162D8daC02176b4d3"
 
 ### Network Configuration
 
