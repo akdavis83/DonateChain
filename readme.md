@@ -430,8 +430,7 @@ This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) 
 
 ### Documentation
 - 📘 **[User Guide (readme3.md)](readme3.md)** - Complete setup and usage instructions
-- 🎯 **[Interview Guide (interview-guide2.md)](interview-guide2.md)** - Technical deep-dive
-- 💼 **[Interview.md](Interview.md)** - High-level summary
+
 
 ### External Resources
 - [RSK Testnet Faucet](https://faucet.testnet.rsk.co/) - Get free test tokens
@@ -448,7 +447,7 @@ This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) 
 
 ## 🎓 About This Project
 
-**DonateChain** was built as a **portfolio centerpiece** to demonstrate senior blockchain engineering capabilities:
+**DonateChain** was built as a **portfolio centerpiece** to demonstrate blockchain engineering capabilities:
 
 - **Smart Contract Development**: Production-ready Solidity with security patterns
 - **Low-Level EVM Interaction**: Manual ABI encoding, direct JSON-RPC calls
