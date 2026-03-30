@@ -20,6 +20,7 @@ export default function LiveFeed({ refreshTrigger }) {
   const [donations, setDonations] = useState([]);
   const [usernames, setUsernames] = useState({});
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
   const [listening, setListening] = useState(false);
   const [tickKey, setTickKey] = useState(0);
   const pollRef = useRef(null);
@@ -54,8 +55,12 @@ export default function LiveFeed({ refreshTrigger }) {
     if (isZeroAddress) return;
     setLoading(true);
     try {
+      console.log("Fetching donation history from:", donationAddr);
+      console.log("Event topic:", DONATION_MADE_TOPIC);
       const logs = await getLogs(donationAddr, DONATION_MADE_TOPIC);
+      console.log("Found logs:", logs.length, logs);
       const parsed = logs.map(parseDonationMadeLog).sort((a, b) => b.id - a.id);
+      console.log("Parsed donations:", parsed);
       setDonations(parsed);
 
       if (logs.length > 0) {
@@ -72,11 +77,13 @@ export default function LiveFeed({ refreshTrigger }) {
         }
       }
       setUsernames((prev) => ({ ...prev, ...usernameMap }));
-    } catch (err) {
-      console.error("Failed to fetch donation history:", err);
-    } finally {
-      setLoading(false);
-    }
+     } catch (err) {
+       console.error("Failed to fetch donation history:", err);
+       console.error("Error details:", JSON.stringify(err, null, 2));
+       setError("Failed to load donation history: " + err.message);
+     } finally {
+       setLoading(false);
+     }
   }, [donationAddr, isZeroAddress, resolveUsername]);
 
   // Poll for new events
@@ -152,8 +159,10 @@ export default function LiveFeed({ refreshTrigger }) {
           )}
         </div>
       </CardHeader>
-      <CardContent className="flex-1 overflow-hidden p-0 px-4 pb-4">
-        {isZeroAddress ? (
+       <CardContent className="flex-1 overflow-hidden p-0 px-4 pb-4">
+         {error ? (
+           <p className="text-xs text-destructive p-4">{error}</p>
+         ) : isZeroAddress ? (
           <p className="text-xs text-muted-foreground px-2">
             Contract not deployed. Update addresses in <code className="font-mono text-accent-foreground">lib/contracts.js</code>
           </p>
