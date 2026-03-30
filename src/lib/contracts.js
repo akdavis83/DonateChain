@@ -4,7 +4,7 @@ export const NETWORK_CONFIG = {
   chainIdDecimal: 31,
   chainName: "RSK Testnet",
   rpcUrls: ["https://public-node.testnet.rsk.co"],
-  blockExplorerUrls: ["https://explorer.testnet.rootstock.io"],
+  blockExplorerUrls: ["https://rootstock-testnet.blockscout.com"],
   nativeCurrency: {
     name: "tRBTC",
     symbol: "tRBTC",
@@ -16,12 +16,12 @@ export const NETWORK_CONFIG = {
 // CONTRACT ADDRESSES — update after deploying to RSK testnet
 // ============================================================
 export const CONTRACT_ADDRESSES = {
-  UserRegistry: "0xb0C881F70d04E5B6b2af2FE8ac7A322053f38662",
-  DonationManager: "0x77F9079ba92520353BF7d8d051cafE2362EF82a1",
+  UserRegistry: "0xc4A2085e3ECB5c6cDE442d4B9cCCbE17a77Fd4C5",
+  DonationManager: "0xe1b952C4c40BfA478Bb4178162D8daC02176b4d3",
 };
 
 // ============================================================
-// ABI: UserRegistry
+// ABI: UserRegistry (deployed on RSK Testnet)
 // ============================================================
 export const USER_REGISTRY_ABI = [
   // Events
@@ -29,43 +29,70 @@ export const USER_REGISTRY_ABI = [
   "event UsernameUpdated(address indexed user, string oldUsername, string newUsername)",
   // Errors
   "error UsernameEmpty()",
-  "error UsernameTooLong(uint256 length, uint256 max)",
+  "error UsernameTooLong()",
   "error UsernameAlreadyTaken(string username)",
-  "error UserNotRegistered(address user)",
   // Write
-  "function register(string calldata username) external",
-  "function updateUsername(string calldata newUsername) external",
+  "function registerUsername(string _username) external",
   // Read
   "function getUsername(address user) external view returns (string memory)",
-  "function getAddress(string calldata username) external view returns (address)",
-  "function isRegistered(address user) external view returns (bool)",
-  "function isUsernameTaken(string calldata username) external view returns (bool)",
+  "function isUsernameTaken(string _username) external view returns (bool)",
+  "function getAddressByUsername(string _username) external view returns (address)",
+  "function hasUsername(address user) external view returns (bool)",
+  "function usernameToAddress(string) external view returns (address)",
+  "function usernames(address) external view returns (string memory)",
 ];
 
 // ============================================================
-// ABI: DonationManager
+// ABI: DonationManager (deployed on RSK Testnet)
 // ============================================================
 export const DONATION_MANAGER_ABI = [
   // Events
-  "event DonationMade(uint256 indexed id, address indexed donor, address indexed organization, uint256 amount, bool anonymous, uint256 timestamp)",
-  "event Withdrawal(address indexed organization, uint256 amount)",
+  "event DonationMade(uint256 indexed id, address indexed donor, address indexed organization, uint256 amount, bool isAnonymous, uint256 timestamp)",
+  "event FundsWithdrawn(address indexed organization, address indexed to, uint256 amount, uint256 timestamp)",
   // Errors
-  "error ZeroAddress()",
-  "error ZeroAmount()",
-  "error InsufficientBalance(uint256 requested, uint256 available)",
+  "error InvalidAmount()",
+  "error InvalidOrganization()",
   "error TransferFailed()",
+  "error InvalidRegistry()",
+  "error NoFundsToWithdraw()",
   // Write
-  "function donate(address organization, bool anonymous) external payable",
+  "function donate(address _organization, bool _anonymous) external payable",
   "function withdraw() external",
   // Read
-  "function donations(uint256 id) external view returns (uint256 id_, address donor, address organization, uint256 amount, bool anonymous, uint256 timestamp)",
   "function donationCount() external view returns (uint256)",
-  "function getOrgDonationIds(address org) external view returns (uint256[] memory)",
-  "function getUserDonationIds(address user) external view returns (uint256[] memory)",
-  "function getOrgStats(address org) external view returns (uint256 totalReceived, uint256 donationCount, uint256 lastDonationTime)",
-  "function orgBalances(address org) external view returns (uint256)",
-  "function registry() external view returns (address)",
+  "function donations(uint256) external view returns (uint256 id, address donor, address organization, uint256 amount, bool isAnonymous, uint256 timestamp)",
+   "function getOrgStats(address org) external view returns (uint256 totalReceived, uint256 donationCount, uint256 lastDonationTime)",
+  "function getDonation(uint256 _id) external view returns (uint256 id, address donor, address organization, uint256 amount, bool isAnonymous, uint256 timestamp)",
+  "function hasOrgDonations(address org) external view returns (bool)",
+  "function orgBalances(address) external view returns (uint256)",
+  "function orgStats(address) external view returns (uint256 totalReceived, uint256 lastDonationTime, uint256 donationCount)",
+  "function userRegistry() external view returns (address)",
 ];
+
+// ============================================================
+// Function Selectors (for ethersProvider.js)
+// ============================================================
+export const FUNCTION_SELECTORS = {
+  // UserRegistry
+  "registerUsername(string)": "36a94134",
+  "getUsername(address)": "ce43c032",
+  "isUsernameTaken(string)": "176c5919",
+  "getAddressByUsername(string)": "6322961d",
+  "hasUsername(address)": "a5c2fb82",
+  "usernameToAddress(string)": "f825f143",
+  "usernames(address)": "ee91877c",
+  // DonationManager
+  "donate(address,bool)": "7be4bae1",
+  "withdraw()": "3ccfd60b",
+  "donationCount()": "2abfab4d",
+  "donations(uint256)": "f8626af8",
+  "getOrgStats(address)": "e3f1e29d",
+  "getDonation(uint256)": "ef07a81f",
+  "hasOrgDonations(address)": "cda88740",
+  "orgBalances(address)": "d8c4ec83",
+  "orgStats(address)": "a2bd8f1a",
+  "userRegistry()": "5c7460d6",
+};
 
 // ============================================================
 // Solidity Source: UserRegistry.sol
