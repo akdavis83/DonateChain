@@ -7,7 +7,7 @@
 
 **DonateChain** is a production-grade decentralized donation platform built on **RSK Testnet**—a Bitcoin merge-mined blockchain that combines Ethereum compatibility with Bitcoin-level security. Every donation is recorded immutably on-chain, providing donors with verifiable proof of their contributions while enabling real-time tracking of fund flows.
 
-> 🎯 **Portfolio Project**: This dApp demonstrates senior-level blockchain engineering capabilities including smart contract security, low-level EVM interaction, performance optimization, and hybrid Web2/Web3 architecture.
+> 🎯 **Portfolio Project**: This dApp demonstrates senior-level blockchain engineering capabilities, including smart contract security, low-level EVM interaction, performance optimization, and hybrid Web2/Web3 architecture.
 
 ---
 
@@ -44,13 +44,12 @@ This repository contains comprehensive documentation for different audiences:
 | Document | Audience | Purpose |
 |----------|----------|---------|
 | **[readme.md](readme.md)** 📖 | Everyone | Quick start, features, overview (you are here) |
+| **[readme2.md](readme2.md)** 📖 | Everyone | Detailed guide |
 | **[readme3.md](readme3.md)** 📘 | End Users | Complete user guide with step-by-step instructions |
-| **[interview-guide2.md](interview-guide2.md)** 🎯 | Technical Interviewers | Deep-dive architecture & security talking points |
-| **[Interview.md](Interview.md)** 💼 | Recruiters | High-level technical summary |
+
 
 **Recommendation:**
 - **Users**: Start with [readme3.md](readme3.md) for detailed setup and usage
-- **Developers**: Review [interview-guide2.md](interview-guide2.md) for technical depth
 - **Quick Start**: Continue reading this document
 
 ---
@@ -363,8 +362,8 @@ npx hardhat verify --network rskTestnet <CONTRACT_ADDRESS>
 
 | Contract | Address | Verified |
 |----------|---------|----------|
-| UserRegistry | `0xb0C881F70d04E5B6b2af2FE8ac7A322053f38662` | ✅ |
-| DonationManager | `0x77F9079ba92520353BF7d8d051cafE2362EF82a1` | ✅ |
+| UserRegistry | `0xc4A2085e3ECB5c6cDE442d4B9cCCbE17a77Fd4C5` | ✅ |
+| DonationManager | `0xe1b952C4c40BfA478Bb4178162D8daC02176b4d3` | ✅ |
 
 **View on Explorer**: [Blockscout RSK Testnet](https://explorer.testnet.rootstock.io/)
 
