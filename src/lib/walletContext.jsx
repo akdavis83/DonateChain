@@ -22,17 +22,24 @@ export function WalletProvider({ children }) {
   const isConnected = !!account && isCorrectNetwork;
 
   const refreshBalance = useCallback(async (addr) => {
-    const bal = await getBalance(addr);
-    setBalance(formatWei(bal, 6));
+    try {
+      const bal = await getBalance(addr);
+      setBalance(formatWei(bal, 6));
+    } catch (err) {
+      console.error("Failed to refresh balance:", err);
+    }
   }, []);
 
   const connect = useCallback(async () => {
     setConnecting(true);
     setError(null);
     try {
+      // Use eth_requestAccounts to prompt MetaMask account selection
       const accounts = await requestAccounts();
       const currentChain = await getChainId();
-      setAccount(accounts[0]);
+      const selectedAccount = accounts[0];
+      
+      setAccount(selectedAccount);
       setChainId(currentChain);
 
       if (currentChain !== NETWORK_CONFIG.chainIdDecimal) {
@@ -40,9 +47,13 @@ export function WalletProvider({ children }) {
         setChainId(NETWORK_CONFIG.chainIdDecimal);
       }
 
-      await refreshBalance(accounts[0]);
+      await refreshBalance(selectedAccount);
     } catch (err) {
-      setError(err.message || "Connection failed");
+      if (err.code === 4001) {
+        setError("Connection rejected. Please connect your wallet to continue.");
+      } else {
+        setError(err.message || "Connection failed");
+      }
     } finally {
       setConnecting(false);
     }
@@ -52,22 +63,41 @@ export function WalletProvider({ children }) {
     setAccount(null);
     setChainId(null);
     setBalance(null);
+    setError(null);
+    console.log("Disconnected from wallet");
   }, []);
 
+  // Force disconnect from MetaMask completely (for account switching)
+  const forceReconnect = useCallback(async () => {
+    // First disconnect (clear our state)
+    disconnect();
+    
+    // Wait a moment
+    await new Promise(r => setTimeout(r, 500));
+    
+    // Then reconnect - this will prompt MetaMask to show account selector if needed
+    await connect();
+  }, [connect, disconnect]);
+
+  // Handle account and chain changes from MetaMask
   useEffect(() => {
     const mm = getMetaMaskProvider();
     if (!mm) return;
 
     const handleAccountsChanged = (accounts) => {
+      console.log("Accounts changed:", accounts);
       if (accounts.length === 0) {
+        // User disconnected or locked MetaMask
         disconnect();
-      } else {
+      } else if (accounts[0] !== account) {
+        // User switched account in MetaMask
         setAccount(accounts[0]);
         refreshBalance(accounts[0]);
       }
     };
 
     const handleChainChanged = (chainIdHex) => {
+      console.log("Chain changed:", chainIdHex);
       setChainId(parseInt(chainIdHex, 16));
     };
 
@@ -78,7 +108,7 @@ export function WalletProvider({ children }) {
       mm.removeListener("accountsChanged", handleAccountsChanged);
       mm.removeListener("chainChanged", handleChainChanged);
     };
-  }, [disconnect, refreshBalance]);
+  }, [account, disconnect, refreshBalance]);
 
   return (
     <WalletContext.Provider
