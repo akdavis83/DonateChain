@@ -4,14 +4,29 @@
 
 import { NETWORK_CONFIG } from "./contracts";
 
+// RSK Testnet RPC URL (for direct queries that MetaMask doesn't support)
+export const RSK_TESTNET_RPC = "https://public-node.testnet.rsk.co";
+
+// Blockscout API for RSK Testnet (supports eth_getLogs)
+export const BLOCKSCOUT_API = "https://rootstock-testnet.blockscout.com/api";
+
+// Helper to get window.ethereum with TypeScript ignore
+function getEthereum() {
+  // @ts-ignore
+  return window.ethereum;
+}
+
 // Modern EIP-6963 Provider Discovery
 let eip6963Providers = [];
 if (typeof window !== "undefined") {
+  // @ts-ignore
   window.addEventListener("eip6963:announceProvider", (event) => {
+    // @ts-ignore
     if (event.detail && event.detail.info && event.detail.provider) {
       eip6963Providers.push(event.detail);
     }
   });
+  // @ts-ignore
   window.dispatchEvent(new Event("eip6963:requestProvider"));
 }
 
@@ -22,17 +37,18 @@ function getMetaMask() {
   if (mmEIP) return mmEIP.provider;
 
   // 2. Legacy fallback
-  if (!window.ethereum) return null;
-  
-  if (window.ethereum.providers && Array.isArray(window.ethereum.providers)) {
-    const mm = window.ethereum.providers.find((p) => p.isMetaMask && !p.isTrustWallet && !p.isBraveWallet && !p.isCoinbaseWallet);
+  const ethereum = window['ethereum'];
+  if (!ethereum) return null;
+
+  if (ethereum.providers && Array.isArray(ethereum.providers)) {
+    const mm = ethereum.providers.find((p) => p['isMetaMask'] && !p['isTrustWallet'] && !p['isBraveWallet'] && !p['isCoinbaseWallet']);
     if (mm) return mm;
   }
-  
-  if (window.ethereum.isMetaMask && !window.ethereum.isTrustWallet && !window.ethereum.isBraveWallet && !window.ethereum.isCoinbaseWallet) {
-    return window.ethereum;
+
+  if (ethereum['isMetaMask'] && !ethereum['isTrustWallet'] && !ethereum['isBraveWallet'] && !ethereum['isCoinbaseWallet']) {
+    return ethereum;
   }
-  
+
   return null;
 }
 
@@ -157,22 +173,22 @@ function keccak256Selector(sig) {
   // we pre-compute known selectors.
   const selectors = {
     // UserRegistry
-    "register(string)": "f2c298be",
-    "updateUsername(string)": "4f068b21",
-    "getUsername(address)": "89e95522",
-    "getAddress(string)": "bf40fac1",
-    "isRegistered(address)": "c3c5a547",
-    "isUsernameTaken(string)": "df092f1c",
+    "registerUsername(string)": "36a94134",
+    "getUsername(address)": "ce43c032",
+    "isUsernameTaken(string)": "176c5919",
+    "getAddressByUsername(string)": "6322961d",
+    "hasUsername(address)": "a5c2fb82",
     // DonationManager
-    "donate(address,bool)": "600c3ad2",
+    "donate(address,bool)": "7be4bae1",
     "withdraw()": "3ccfd60b",
-    "donationCount()": "10e54b16",
-    "donations(uint256)": "6f9fb98a",
-    "getOrgDonationIds(address)": "c64dba56",
-    "getUserDonationIds(address)": "3b75d86e",
-    "getOrgStats(address)": "7ec9f3a2",
-    "orgBalances(address)": "ee9ef588",
-    "registry()": "7b103999",
+    "donationCount()": "2abfab4d",
+    "donations(uint256)": "f8626af8",
+    "getOrgStats(address)": "e3f1e29d",
+    "getDonation(uint256)": "ef07a81f",
+    "hasOrgDonations(address)": "cda88740",
+    "orgBalances(address)": "d8c4ec83",
+    "orgStats(address)": "a2bd8f1a",
+    "userRegistry()": "5c7460d6",
   };
   return selectors[sig] || null;
 }
@@ -290,24 +306,40 @@ export function decodeAddress(hex) {
 // ============================================================
 
 export async function getLogs(contractAddress, eventTopic, fromBlock = "0x0") {
-  const logs = await provider().request({
-    method: "eth_getLogs",
-    params: [
-      {
-        address: contractAddress,
-        topics: [eventTopic],
-        fromBlock,
-        toBlock: "latest",
-      },
-    ],
-  });
-  return logs;
+  try {
+    console.log("getLogs called with:", { contractAddress, eventTopic, fromBlock });
+    
+    // Use Blockscout API instead of RPC (RSK RPC doesn't support eth_getLogs)
+    const response = await fetch(`${BLOCKSCOUT_API}/logs?address=${contractAddress}&topic=${eventTopic}&fromBlock=${fromBlock}`, {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+    });
+    
+    if (!response.ok) {
+      throw new Error(`Blockscout API error: ${response.status}`);
+    }
+    
+    const data = await response.json();
+    const logs = data.items || [];
+    
+    console.log("getLogs result:", logs.length, "logs found");
+    return logs.map(log => ({
+      topics: log.topics,
+      data: log.data,
+      blockNumber: log.block_number,
+      transactionHash: log.transaction_hash,
+      address: log.address,
+    }));
+  } catch (err) {
+    console.error("getLogs error:", err);
+    throw err;
+  }
 }
 
 // DonationMade event topic (keccak256 of the event signature)
-// event DonationMade(uint256 indexed id, address indexed donor, address indexed organization, uint256 amount, bool anonymous, uint256 timestamp)
+// event DonationMade(uint256 indexed id, address indexed donor, address indexed organization, uint256 amount, bool isAnonymous, uint256 timestamp)
 // We pre-compute this
-export const DONATION_MADE_TOPIC = "0x9e15e1caa6e3e66bb81eb3eb1e2f040e06ceb00e867e2e9c3ce0a4aca6f11ee5";
+export const DONATION_MADE_TOPIC = "0xbad61217da3f32a7d23f0c6f395950f4cf02002f1e010bff3f6fa460ef6c8139";
 
 export function parseDonationMadeLog(log) {
   // topics[0] = event sig
