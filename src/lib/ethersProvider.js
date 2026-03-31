@@ -309,8 +309,12 @@ export async function getLogs(contractAddress, eventTopic, fromBlock = "0x0") {
   try {
     console.log("getLogs called with:", { contractAddress, eventTopic, fromBlock });
     
+    // Convert hex block numbers to decimal for Blockscout API
+    const fromBlockDecimal = parseInt(fromBlock, 16);
+    const toBlockDecimal = "latest"; // We can use "latest" to get logs up to the most recent block
+    
     // Use Blockscout API instead of RPC (RSK RPC doesn't support eth_getLogs)
-    const response = await fetch(`${BLOCKSCOUT_API}/logs?address=${contractAddress}&topic=${eventTopic}&fromBlock=${fromBlock}`, {
+    const response = await fetch(`${BLOCKSCOUT_API}?module=logs&action=getLogs&address=${contractAddress}&topic0=${eventTopic}&fromBlock=${fromBlockDecimal}&toBlock=${toBlockDecimal}`, {
       method: "GET",
       headers: { "Content-Type": "application/json" },
     });
@@ -320,14 +324,18 @@ export async function getLogs(contractAddress, eventTopic, fromBlock = "0x0") {
     }
     
     const data = await response.json();
-    const logs = data.items || [];
+    if (data.status !== "1" || !data.result) {
+      throw new Error(`Blockscout API error: ${data.message}`);
+    }
+    
+    const logs = data.result || [];
     
     console.log("getLogs result:", logs.length, "logs found");
     return logs.map(log => ({
       topics: log.topics,
       data: log.data,
-      blockNumber: log.block_number,
-      transactionHash: log.transaction_hash,
+      blockNumber: log.blockNumber,
+      transactionHash: log.hash,
       address: log.address,
     }));
   } catch (err) {
